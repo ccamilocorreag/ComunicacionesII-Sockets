@@ -1,0 +1,436 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="QueTanTaradoEresModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="PAR_Partidas">
+          <Key>
+            <PropertyRef Name="PAR_Id" />
+          </Key>
+          <Property Name="PAR_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PAR_FechaHora" Type="datetime" Nullable="false" />
+          <Property Name="PAR_Cerrada" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PRE_Preguntas">
+          <Key>
+            <PropertyRef Name="PRE_Id" />
+          </Key>
+          <Property Name="PRE_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PRE_Nombre" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="REP_RespuestasPreguntas">
+          <Key>
+            <PropertyRef Name="REP_Id" />
+          </Key>
+          <Property Name="REP_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PRE_Id" Type="int" Nullable="false" />
+          <Property Name="RES_Id" Type="int" Nullable="false" />
+          <Property Name="REP_Correcta" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RES_Respuestas">
+          <Key>
+            <PropertyRef Name="RES_Id" />
+          </Key>
+          <Property Name="RES_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RES_Nombre" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="REU_RespuestasUsuarios">
+          <Key>
+            <PropertyRef Name="REU_Id" />
+          </Key>
+          <Property Name="REU_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="REP_Id" Type="int" Nullable="false" />
+          <Property Name="USU_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="USP_UsuariosPartidas">
+          <Key>
+            <PropertyRef Name="USP_Id" />
+          </Key>
+          <Property Name="USP_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PAR_Id" Type="int" Nullable="false" />
+          <Property Name="USU_Id" Type="int" Nullable="false" />
+          <Property Name="USP_MarcadorFinal" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="USU_Usuarios">
+          <Key>
+            <PropertyRef Name="USU_Id" />
+          </Key>
+          <Property Name="USU_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="USU_Apodo" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_REP_RespuestasPreguntas_PRE_Preguntas">
+          <End Role="PRE_Preguntas" Type="Self.PRE_Preguntas" Multiplicity="1" />
+          <End Role="REP_RespuestasPreguntas" Type="Self.REP_RespuestasPreguntas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRE_Preguntas">
+              <PropertyRef Name="PRE_Id" />
+            </Principal>
+            <Dependent Role="REP_RespuestasPreguntas">
+              <PropertyRef Name="PRE_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_REP_RespuestasPreguntas_RES_Respuestas">
+          <End Role="RES_Respuestas" Type="Self.RES_Respuestas" Multiplicity="1" />
+          <End Role="REP_RespuestasPreguntas" Type="Self.REP_RespuestasPreguntas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RES_Respuestas">
+              <PropertyRef Name="RES_Id" />
+            </Principal>
+            <Dependent Role="REP_RespuestasPreguntas">
+              <PropertyRef Name="RES_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_REU_RespuestasUsuarios_REP_RespuestasPreguntas">
+          <End Role="REP_RespuestasPreguntas" Type="Self.REP_RespuestasPreguntas" Multiplicity="1" />
+          <End Role="REU_RespuestasUsuarios" Type="Self.REU_RespuestasUsuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="REP_RespuestasPreguntas">
+              <PropertyRef Name="REP_Id" />
+            </Principal>
+            <Dependent Role="REU_RespuestasUsuarios">
+              <PropertyRef Name="REP_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_REU_RespuestasUsuarios_USU_Usuarios">
+          <End Role="USU_Usuarios" Type="Self.USU_Usuarios" Multiplicity="1" />
+          <End Role="REU_RespuestasUsuarios" Type="Self.REU_RespuestasUsuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USU_Usuarios">
+              <PropertyRef Name="USU_Id" />
+            </Principal>
+            <Dependent Role="REU_RespuestasUsuarios">
+              <PropertyRef Name="USU_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USP_UsuariosPartidas_PAR_Partidas">
+          <End Role="PAR_Partidas" Type="Self.PAR_Partidas" Multiplicity="1" />
+          <End Role="USP_UsuariosPartidas" Type="Self.USP_UsuariosPartidas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PAR_Partidas">
+              <PropertyRef Name="PAR_Id" />
+            </Principal>
+            <Dependent Role="USP_UsuariosPartidas">
+              <PropertyRef Name="PAR_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USP_UsuariosPartidas_USU_Usuarios">
+          <End Role="USU_Usuarios" Type="Self.USU_Usuarios" Multiplicity="1" />
+          <End Role="USP_UsuariosPartidas" Type="Self.USP_UsuariosPartidas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USU_Usuarios">
+              <PropertyRef Name="USU_Id" />
+            </Principal>
+            <Dependent Role="USP_UsuariosPartidas">
+              <PropertyRef Name="USU_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="QueTanTaradoEresModelStoreContainer">
+          <EntitySet Name="PAR_Partidas" EntityType="Self.PAR_Partidas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRE_Preguntas" EntityType="Self.PRE_Preguntas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="REP_RespuestasPreguntas" EntityType="Self.REP_RespuestasPreguntas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RES_Respuestas" EntityType="Self.RES_Respuestas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="REU_RespuestasUsuarios" EntityType="Self.REU_RespuestasUsuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USP_UsuariosPartidas" EntityType="Self.USP_UsuariosPartidas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USU_Usuarios" EntityType="Self.USU_Usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_REP_RespuestasPreguntas_PRE_Preguntas" Association="Self.FK_REP_RespuestasPreguntas_PRE_Preguntas">
+            <End Role="PRE_Preguntas" EntitySet="PRE_Preguntas" />
+            <End Role="REP_RespuestasPreguntas" EntitySet="REP_RespuestasPreguntas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_REP_RespuestasPreguntas_RES_Respuestas" Association="Self.FK_REP_RespuestasPreguntas_RES_Respuestas">
+            <End Role="RES_Respuestas" EntitySet="RES_Respuestas" />
+            <End Role="REP_RespuestasPreguntas" EntitySet="REP_RespuestasPreguntas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_REU_RespuestasUsuarios_REP_RespuestasPreguntas" Association="Self.FK_REU_RespuestasUsuarios_REP_RespuestasPreguntas">
+            <End Role="REP_RespuestasPreguntas" EntitySet="REP_RespuestasPreguntas" />
+            <End Role="REU_RespuestasUsuarios" EntitySet="REU_RespuestasUsuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_REU_RespuestasUsuarios_USU_Usuarios" Association="Self.FK_REU_RespuestasUsuarios_USU_Usuarios">
+            <End Role="USU_Usuarios" EntitySet="USU_Usuarios" />
+            <End Role="REU_RespuestasUsuarios" EntitySet="REU_RespuestasUsuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USP_UsuariosPartidas_PAR_Partidas" Association="Self.FK_USP_UsuariosPartidas_PAR_Partidas">
+            <End Role="PAR_Partidas" EntitySet="PAR_Partidas" />
+            <End Role="USP_UsuariosPartidas" EntitySet="USP_UsuariosPartidas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USP_UsuariosPartidas_USU_Usuarios" Association="Self.FK_USP_UsuariosPartidas_USU_Usuarios">
+            <End Role="USU_Usuarios" EntitySet="USU_Usuarios" />
+            <End Role="USP_UsuariosPartidas" EntitySet="USP_UsuariosPartidas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="QueTanTaradoEresModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="PAR_Partidas">
+          <Key>
+            <PropertyRef Name="PAR_Id" />
+          </Key>
+          <Property Name="PAR_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PAR_FechaHora" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PAR_Cerrada" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="USP_UsuariosPartidas" Relationship="Self.FK_USP_UsuariosPartidas_PAR_Partidas" FromRole="PAR_Partidas" ToRole="USP_UsuariosPartidas" />
+        </EntityType>
+        <EntityType Name="PRE_Preguntas">
+          <Key>
+            <PropertyRef Name="PRE_Id" />
+          </Key>
+          <Property Name="PRE_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PRE_Nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="REP_RespuestasPreguntas" Relationship="Self.FK_REP_RespuestasPreguntas_PRE_Preguntas" FromRole="PRE_Preguntas" ToRole="REP_RespuestasPreguntas" />
+        </EntityType>
+        <EntityType Name="REP_RespuestasPreguntas">
+          <Key>
+            <PropertyRef Name="REP_Id" />
+          </Key>
+          <Property Name="REP_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PRE_Id" Type="Int32" Nullable="false" />
+          <Property Name="RES_Id" Type="Int32" Nullable="false" />
+          <Property Name="REP_Correcta" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="PRE_Preguntas" Relationship="Self.FK_REP_RespuestasPreguntas_PRE_Preguntas" FromRole="REP_RespuestasPreguntas" ToRole="PRE_Preguntas" />
+          <NavigationProperty Name="RES_Respuestas" Relationship="Self.FK_REP_RespuestasPreguntas_RES_Respuestas" FromRole="REP_RespuestasPreguntas" ToRole="RES_Respuestas" />
+          <NavigationProperty Name="REU_RespuestasUsuarios" Relationship="Self.FK_REU_RespuestasUsuarios_REP_RespuestasPreguntas" FromRole="REP_RespuestasPreguntas" ToRole="REU_RespuestasUsuarios" />
+        </EntityType>
+        <EntityType Name="RES_Respuestas">
+          <Key>
+            <PropertyRef Name="RES_Id" />
+          </Key>
+          <Property Name="RES_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RES_Nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="REP_RespuestasPreguntas" Relationship="Self.FK_REP_RespuestasPreguntas_RES_Respuestas" FromRole="RES_Respuestas" ToRole="REP_RespuestasPreguntas" />
+        </EntityType>
+        <EntityType Name="REU_RespuestasUsuarios">
+          <Key>
+            <PropertyRef Name="REU_Id" />
+          </Key>
+          <Property Name="REU_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="REP_Id" Type="Int32" Nullable="false" />
+          <Property Name="USU_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="REP_RespuestasPreguntas" Relationship="Self.FK_REU_RespuestasUsuarios_REP_RespuestasPreguntas" FromRole="REU_RespuestasUsuarios" ToRole="REP_RespuestasPreguntas" />
+          <NavigationProperty Name="USU_Usuarios" Relationship="Self.FK_REU_RespuestasUsuarios_USU_Usuarios" FromRole="REU_RespuestasUsuarios" ToRole="USU_Usuarios" />
+        </EntityType>
+        <EntityType Name="USP_UsuariosPartidas">
+          <Key>
+            <PropertyRef Name="USP_Id" />
+          </Key>
+          <Property Name="USP_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PAR_Id" Type="Int32" Nullable="false" />
+          <Property Name="USU_Id" Type="Int32" Nullable="false" />
+          <Property Name="USP_MarcadorFinal" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PAR_Partidas" Relationship="Self.FK_USP_UsuariosPartidas_PAR_Partidas" FromRole="USP_UsuariosPartidas" ToRole="PAR_Partidas" />
+          <NavigationProperty Name="USU_Usuarios" Relationship="Self.FK_USP_UsuariosPartidas_USU_Usuarios" FromRole="USP_UsuariosPartidas" ToRole="USU_Usuarios" />
+        </EntityType>
+        <EntityType Name="USU_Usuarios">
+          <Key>
+            <PropertyRef Name="USU_Id" />
+          </Key>
+          <Property Name="USU_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="USU_Apodo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="REU_RespuestasUsuarios" Relationship="Self.FK_REU_RespuestasUsuarios_USU_Usuarios" FromRole="USU_Usuarios" ToRole="REU_RespuestasUsuarios" />
+          <NavigationProperty Name="USP_UsuariosPartidas" Relationship="Self.FK_USP_UsuariosPartidas_USU_Usuarios" FromRole="USU_Usuarios" ToRole="USP_UsuariosPartidas" />
+        </EntityType>
+        <Association Name="FK_USP_UsuariosPartidas_PAR_Partidas">
+          <End Role="PAR_Partidas" Type="Self.PAR_Partidas" Multiplicity="1" />
+          <End Role="USP_UsuariosPartidas" Type="Self.USP_UsuariosPartidas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PAR_Partidas">
+              <PropertyRef Name="PAR_Id" />
+            </Principal>
+            <Dependent Role="USP_UsuariosPartidas">
+              <PropertyRef Name="PAR_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_REP_RespuestasPreguntas_PRE_Preguntas">
+          <End Role="PRE_Preguntas" Type="Self.PRE_Preguntas" Multiplicity="1" />
+          <End Role="REP_RespuestasPreguntas" Type="Self.REP_RespuestasPreguntas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRE_Preguntas">
+              <PropertyRef Name="PRE_Id" />
+            </Principal>
+            <Dependent Role="REP_RespuestasPreguntas">
+              <PropertyRef Name="PRE_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_REP_RespuestasPreguntas_RES_Respuestas">
+          <End Role="RES_Respuestas" Type="Self.RES_Respuestas" Multiplicity="1" />
+          <End Role="REP_RespuestasPreguntas" Type="Self.REP_RespuestasPreguntas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RES_Respuestas">
+              <PropertyRef Name="RES_Id" />
+            </Principal>
+            <Dependent Role="REP_RespuestasPreguntas">
+              <PropertyRef Name="RES_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_REU_RespuestasUsuarios_REP_RespuestasPreguntas">
+          <End Role="REP_RespuestasPreguntas" Type="Self.REP_RespuestasPreguntas" Multiplicity="1" />
+          <End Role="REU_RespuestasUsuarios" Type="Self.REU_RespuestasUsuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="REP_RespuestasPreguntas">
+              <PropertyRef Name="REP_Id" />
+            </Principal>
+            <Dependent Role="REU_RespuestasUsuarios">
+              <PropertyRef Name="REP_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_REU_RespuestasUsuarios_USU_Usuarios">
+          <End Role="USU_Usuarios" Type="Self.USU_Usuarios" Multiplicity="1" />
+          <End Role="REU_RespuestasUsuarios" Type="Self.REU_RespuestasUsuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USU_Usuarios">
+              <PropertyRef Name="USU_Id" />
+            </Principal>
+            <Dependent Role="REU_RespuestasUsuarios">
+              <PropertyRef Name="USU_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USP_UsuariosPartidas_USU_Usuarios">
+          <End Role="USU_Usuarios" Type="Self.USU_Usuarios" Multiplicity="1" />
+          <End Role="USP_UsuariosPartidas" Type="Self.USP_UsuariosPartidas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USU_Usuarios">
+              <PropertyRef Name="USU_Id" />
+            </Principal>
+            <Dependent Role="USP_UsuariosPartidas">
+              <PropertyRef Name="USU_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="QueTanTaradoEresEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="PAR_Partidas" EntityType="Self.PAR_Partidas" />
+          <EntitySet Name="PRE_Preguntas" EntityType="Self.PRE_Preguntas" />
+          <EntitySet Name="REP_RespuestasPreguntas" EntityType="Self.REP_RespuestasPreguntas" />
+          <EntitySet Name="RES_Respuestas" EntityType="Self.RES_Respuestas" />
+          <EntitySet Name="REU_RespuestasUsuarios" EntityType="Self.REU_RespuestasUsuarios" />
+          <EntitySet Name="USP_UsuariosPartidas" EntityType="Self.USP_UsuariosPartidas" />
+          <EntitySet Name="USU_Usuarios" EntityType="Self.USU_Usuarios" />
+          <AssociationSet Name="FK_USP_UsuariosPartidas_PAR_Partidas" Association="Self.FK_USP_UsuariosPartidas_PAR_Partidas">
+            <End Role="PAR_Partidas" EntitySet="PAR_Partidas" />
+            <End Role="USP_UsuariosPartidas" EntitySet="USP_UsuariosPartidas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_REP_RespuestasPreguntas_PRE_Preguntas" Association="Self.FK_REP_RespuestasPreguntas_PRE_Preguntas">
+            <End Role="PRE_Preguntas" EntitySet="PRE_Preguntas" />
+            <End Role="REP_RespuestasPreguntas" EntitySet="REP_RespuestasPreguntas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_REP_RespuestasPreguntas_RES_Respuestas" Association="Self.FK_REP_RespuestasPreguntas_RES_Respuestas">
+            <End Role="RES_Respuestas" EntitySet="RES_Respuestas" />
+            <End Role="REP_RespuestasPreguntas" EntitySet="REP_RespuestasPreguntas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_REU_RespuestasUsuarios_REP_RespuestasPreguntas" Association="Self.FK_REU_RespuestasUsuarios_REP_RespuestasPreguntas">
+            <End Role="REP_RespuestasPreguntas" EntitySet="REP_RespuestasPreguntas" />
+            <End Role="REU_RespuestasUsuarios" EntitySet="REU_RespuestasUsuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_REU_RespuestasUsuarios_USU_Usuarios" Association="Self.FK_REU_RespuestasUsuarios_USU_Usuarios">
+            <End Role="USU_Usuarios" EntitySet="USU_Usuarios" />
+            <End Role="REU_RespuestasUsuarios" EntitySet="REU_RespuestasUsuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USP_UsuariosPartidas_USU_Usuarios" Association="Self.FK_USP_UsuariosPartidas_USU_Usuarios">
+            <End Role="USU_Usuarios" EntitySet="USU_Usuarios" />
+            <End Role="USP_UsuariosPartidas" EntitySet="USP_UsuariosPartidas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="QueTanTaradoEresModelStoreContainer" CdmEntityContainer="QueTanTaradoEresEntities">
+          <EntitySetMapping Name="PAR_Partidas">
+            <EntityTypeMapping TypeName="QueTanTaradoEresModel.PAR_Partidas">
+              <MappingFragment StoreEntitySet="PAR_Partidas">
+                <ScalarProperty Name="PAR_Id" ColumnName="PAR_Id" />
+                <ScalarProperty Name="PAR_FechaHora" ColumnName="PAR_FechaHora" />
+                <ScalarProperty Name="PAR_Cerrada" ColumnName="PAR_Cerrada" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PRE_Preguntas">
+            <EntityTypeMapping TypeName="QueTanTaradoEresModel.PRE_Preguntas">
+              <MappingFragment StoreEntitySet="PRE_Preguntas">
+                <ScalarProperty Name="PRE_Id" ColumnName="PRE_Id" />
+                <ScalarProperty Name="PRE_Nombre" ColumnName="PRE_Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="REP_RespuestasPreguntas">
+            <EntityTypeMapping TypeName="QueTanTaradoEresModel.REP_RespuestasPreguntas">
+              <MappingFragment StoreEntitySet="REP_RespuestasPreguntas">
+                <ScalarProperty Name="REP_Id" ColumnName="REP_Id" />
+                <ScalarProperty Name="PRE_Id" ColumnName="PRE_Id" />
+                <ScalarProperty Name="RES_Id" ColumnName="RES_Id" />
+                <ScalarProperty Name="REP_Correcta" ColumnName="REP_Correcta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RES_Respuestas">
+            <EntityTypeMapping TypeName="QueTanTaradoEresModel.RES_Respuestas">
+              <MappingFragment StoreEntitySet="RES_Respuestas">
+                <ScalarProperty Name="RES_Id" ColumnName="RES_Id" />
+                <ScalarProperty Name="RES_Nombre" ColumnName="RES_Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="REU_RespuestasUsuarios">
+            <EntityTypeMapping TypeName="QueTanTaradoEresModel.REU_RespuestasUsuarios">
+              <MappingFragment StoreEntitySet="REU_RespuestasUsuarios">
+                <ScalarProperty Name="REU_Id" ColumnName="REU_Id" />
+                <ScalarProperty Name="REP_Id" ColumnName="REP_Id" />
+                <ScalarProperty Name="USU_Id" ColumnName="USU_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USP_UsuariosPartidas">
+            <EntityTypeMapping TypeName="QueTanTaradoEresModel.USP_UsuariosPartidas">
+              <MappingFragment StoreEntitySet="USP_UsuariosPartidas">
+                <ScalarProperty Name="USP_Id" ColumnName="USP_Id" />
+                <ScalarProperty Name="PAR_Id" ColumnName="PAR_Id" />
+                <ScalarProperty Name="USU_Id" ColumnName="USU_Id" />
+                <ScalarProperty Name="USP_MarcadorFinal" ColumnName="USP_MarcadorFinal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USU_Usuarios">
+            <EntityTypeMapping TypeName="QueTanTaradoEresModel.USU_Usuarios">
+              <MappingFragment StoreEntitySet="USU_Usuarios">
+                <ScalarProperty Name="USU_Id" ColumnName="USU_Id" />
+                <ScalarProperty Name="USU_Apodo" ColumnName="USU_Apodo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
